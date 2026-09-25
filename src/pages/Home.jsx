@@ -168,12 +168,12 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-paper">
-      <div className="max-w-md mx-auto px-5 pt-6 pb-4 flex items-center justify-between">
+      <div className="max-w-md mx-auto px-5 pt-6 pb-4 flex items-center justify-between animate-fade-in">
         <h1 className="font-serif text-2xl font-bold text-accent">StudySpot</h1>
         <button
           onClick={abrirPanel}
           aria-label="Abrir filtros"
-          className="relative w-10 h-10 rounded-xl bg-accent flex items-center justify-center flex-shrink-0"
+          className="relative w-10 h-10 rounded-xl bg-accent flex items-center justify-center flex-shrink-0 transition-transform duration-150 hover:scale-105 active:scale-95"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F7F4EE" strokeWidth="2" strokeLinecap="round">
             <line x1="4" y1="6" x2="20" y2="6" />
@@ -184,12 +184,12 @@ export default function Home() {
             <circle cx="9" cy="18" r="2.2" fill="#F7F4EE" stroke="none" />
           </svg>
           {hayFiltrosActivos && (
-            <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-gold border-2 border-paper" />
+            <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-gold border-2 border-paper animate-pop-in" />
           )}
         </button>
       </div>
 
-      <p className="max-w-md mx-auto px-5 pb-4 text-sm text-muted">
+      <p className="max-w-md mx-auto px-5 pb-4 text-sm text-muted animate-fade-in" style={{ animationDelay: "80ms" }}>
         Encuentra el mejor lugar para estudiar en tu universidad
       </p>
 
@@ -197,11 +197,12 @@ export default function Home() {
         {loading && <p className="text-sm text-muted">Cargando lugares…</p>}
         {error && <p className="text-sm text-red-600">No se pudo conectar: {error}</p>}
 
-        {lugaresFiltrados.map((lugar) => (
+        {lugaresFiltrados.map((lugar, index) => (
           <Link
             key={lugar.id}
             to={`/lugar/${lugar.id}`}
-            className="bg-white border border-neutral-200 rounded-2xl p-3.5 flex gap-3 items-start"
+            style={{ animationDelay: `${index * 60}ms` }}
+            className="animate-fade-in-up bg-white border border-neutral-200 rounded-2xl p-3.5 flex gap-3 items-start transition-all duration-200 ease-out hover:-translate-y-0.5 hover:shadow-md active:scale-[0.98] active:shadow-none"
           >
             <div className="w-[60px] h-[60px] rounded-xl bg-accentLight flex items-center justify-center flex-shrink-0">
               <TipoIcon tipo={lugar.tipo} />
