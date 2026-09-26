@@ -5,7 +5,7 @@ import { supabase } from "../lib/supabaseClient";
 const TIPO_LABEL = { cafe: "Café", biblioteca: "Biblioteca", sala: "Sala de estudio" };
 
 function TipoIconGrande({ tipo }) {
-  const common = { width: 52, height: 52, viewBox: "0 0 24 24", fill: "none", stroke: "#2C4A31", strokeWidth: 1.5, strokeLinecap: "round", strokeLinejoin: "round" };
+  const common = { width: 44, height: 44, viewBox: "0 0 24 24", fill: "none", stroke: "#2C4A31", strokeWidth: 1.5, strokeLinecap: "round", strokeLinejoin: "round" };
   if (tipo === "biblioteca") {
     return (
       <svg {...common}>
@@ -27,6 +27,15 @@ function TipoIconGrande({ tipo }) {
       <path d="M3 8h13v5a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5V8Z" />
       <path d="M16 9h2a2 2 0 0 1 0 4h-2" />
       <path d="M7 2v2M11 2v2" />
+    </svg>
+  );
+}
+
+function PinIcon() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#847C6B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 21s7-6.5 7-11.5A7 7 0 0 0 5 9.5C5 14.5 12 21 12 21Z" />
+      <circle cx="12" cy="9.5" r="2.2" />
     </svg>
   );
 }
@@ -54,6 +63,14 @@ function Stars({ rating }) {
   );
 }
 
+function TagBadge({ children }) {
+  return (
+    <span className="inline-flex items-center gap-1 text-[11px] font-medium text-accent bg-accentLight px-2.5 py-1 rounded-full">
+      {children}
+    </span>
+  );
+}
+
 function etiquetaNivel(promedio, tipo) {
   if (!promedio) return "Sin datos";
   if (tipo === "ruido") {
@@ -69,7 +86,9 @@ function etiquetaNivel(promedio, tipo) {
 function MetricCard({ icon, label, valor }) {
   return (
     <div className="bg-white border border-neutral-200 rounded-2xl p-4 text-center">
-      <div className="flex justify-center mb-1.5">{icon}</div>
+      <div className="w-9 h-9 rounded-full bg-accentLight flex items-center justify-center mx-auto mb-2">
+        {icon}
+      </div>
       <div className="text-[13px] font-semibold text-ink">{label}</div>
       <div className="text-[11px] text-muted mt-0.5">{valor}</div>
     </div>
@@ -81,14 +100,21 @@ export default function Detalle() {
   const [lugar, setLugar] = useState(null);
   const [resenas, setResenas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
     async function fetchDetalle() {
-      const { data: lugarData } = await supabase
+      const { data: lugarData, error: lugarError } = await supabase
         .from("lugares")
         .select("*")
         .eq("id", id)
         .single();
+
+      if (lugarError || !lugarData) {
+        setNotFound(true);
+        setLoading(false);
+        return;
+      }
       setLugar(lugarData);
 
       const { data: resenasData } = await supabase
@@ -111,94 +137,124 @@ export default function Detalle() {
   const ratingGeneral = resenas.length ? (promWifi + promEnchufes + promRuido) / 3 : 0;
 
   if (loading) {
-    return <div className="min-h-screen bg-paper p-6 text-sm text-muted">Cargando…</div>;
+    return (
+      <div className="min-h-screen bg-paper flex items-center justify-center">
+        <p className="text-sm text-muted animate-fade-in">Cargando…</p>
+      </div>
+    );
+  }
+
+  if (notFound) {
+    return (
+      <div className="min-h-screen bg-paper flex flex-col items-center justify-center px-6 text-center gap-4">
+        <p className="text-ink font-semibold">No encontramos ese lugar.</p>
+        <p className="text-sm text-muted">Puede que el link esté roto o el lugar ya no exista.</p>
+        <Link to="/" className="text-accent font-semibold text-sm">
+          ← Volver a la lista
+        </Link>
+      </div>
+    );
   }
 
   return (
     <div className="min-h-screen bg-paper pb-28">
-      <div className="relative h-40 bg-accentLight flex items-center justify-center">
-        <Link
-          to="/"
-          aria-label="Volver"
-          className="absolute top-4 left-4 w-9 h-9 rounded-xl bg-white flex items-center justify-center"
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#232019" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M19 12H5M12 19l-7-7 7-7" />
-          </svg>
-        </Link>
-        <TipoIconGrande tipo={lugar?.tipo} />
-      </div>
-
-      <div className="max-w-md mx-auto px-5 pt-5">
-        <h1 className="font-serif text-2xl font-bold text-ink">{lugar?.nombre}</h1>
-        <div className="text-[13px] text-muted mt-1">
-          {TIPO_LABEL[lugar?.tipo] ?? lugar?.tipo} · {lugar?.ubicacion}
+      <div className="max-w-2xl mx-auto md:pt-8 md:px-8">
+        <div className="relative h-40 md:h-56 md:rounded-3xl bg-accentLight flex items-center justify-center animate-fade-in">
+          <Link
+            to="/"
+            aria-label="Volver"
+            className="absolute top-4 left-4 w-9 h-9 rounded-xl bg-white flex items-center justify-center transition-transform active:scale-90"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#232019" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+          </Link>
+          <TipoIconGrande tipo={lugar?.tipo} />
         </div>
 
-        <div className="flex items-center gap-1.5 mt-3">
-          {ratingGeneral > 0 ? (
-            <>
-              <StarIcon />
-              <span className="text-base font-bold text-ink">{ratingGeneral.toFixed(1)}</span>
-              <span className="text-[13px] text-muted">
-                · {resenas.length} {resenas.length === 1 ? "reseña" : "reseñas"}
-              </span>
-            </>
-          ) : (
-            <span className="text-[13px] text-muted">Todavía no tiene reseñas</span>
-          )}
-        </div>
+        <div className="px-5 md:px-0 pt-5 animate-fade-in-up">
+          <h1 className="font-serif text-2xl md:text-3xl font-bold text-ink">{lugar?.nombre}</h1>
+          <div className="flex items-center gap-1 text-[13px] text-muted mt-1.5">
+            <PinIcon />
+            {TIPO_LABEL[lugar?.tipo] ?? lugar?.tipo} · {lugar?.ubicacion}
+          </div>
 
-        <div className="grid grid-cols-3 gap-2.5 mt-4">
-          <MetricCard
-            icon={
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2C4A31" strokeWidth="2" strokeLinecap="round">
-                <path d="M4 10a12 12 0 0 1 16 0" />
-                <path d="M7.5 13.5a7 7 0 0 1 9 0" />
-                <circle cx="12" cy="18.5" r="0.9" fill="#2C4A31" stroke="none" />
-              </svg>
-            }
-            label="Wifi"
-            valor={etiquetaNivel(promWifi, "wifi")}
-          />
-          <MetricCard
-            icon={
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2C4A31" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M9 3v5M15 3v5M7 8h10v3a5 5 0 0 1-10 0V8Z" />
-                <path d="M12 16v5" />
-              </svg>
-            }
-            label="Enchufes"
-            valor={etiquetaNivel(promEnchufes, "enchufes")}
-          />
-          <MetricCard
-            icon={
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2C4A31" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M5 9v6h4l5 4V5L9 9H5Z" />
-                <path d="M17 9a4 4 0 0 1 0 6" />
-              </svg>
-            }
-            label="Silencio"
-            valor={etiquetaNivel(promRuido, "ruido")}
-          />
-        </div>
+          <div className="flex flex-wrap gap-1.5 mt-3">
+            <TagBadge>{TIPO_LABEL[lugar?.tipo]}</TagBadge>
+            {promWifi >= 3.5 && <TagBadge>Wifi</TagBadge>}
+            {promEnchufes >= 3.5 && <TagBadge>Tomas</TagBadge>}
+            {promRuido >= 3.5 && <TagBadge>Silencio</TagBadge>}
+          </div>
 
-        <h2 className="mt-7 mb-3 text-[15px] font-bold text-ink">Reseñas</h2>
-        <div className="flex flex-col gap-3">
-          {resenas.map((r) => (
-            <div key={r.id} className="bg-white border border-neutral-200 rounded-2xl p-3.5">
-              <div className="flex items-center justify-between">
-                <div className="text-[13px] font-semibold text-ink">Estudiante</div>
-                <Stars rating={(r.rating_wifi + r.rating_enchufes + r.rating_ruido) / 3} />
+          <div className="flex items-center gap-1.5 mt-4">
+            {ratingGeneral > 0 ? (
+              <>
+                <StarIcon />
+                <span className="text-base font-bold text-ink">{ratingGeneral.toFixed(1)}</span>
+                <span className="text-[13px] text-muted">
+                  · {resenas.length} {resenas.length === 1 ? "reseña" : "reseñas"}
+                </span>
+              </>
+            ) : (
+              <span className="text-[13px] text-muted">Todavía no tiene reseñas — ¡sé el primero!</span>
+            )}
+          </div>
+
+          <div className="grid grid-cols-3 gap-2.5 mt-5">
+            <MetricCard
+              icon={
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#2C4A31" strokeWidth="2" strokeLinecap="round">
+                  <path d="M4 10a12 12 0 0 1 16 0" />
+                  <path d="M7.5 13.5a7 7 0 0 1 9 0" />
+                  <circle cx="12" cy="18.5" r="0.9" fill="#2C4A31" stroke="none" />
+                </svg>
+              }
+              label="Wifi"
+              valor={etiquetaNivel(promWifi, "wifi")}
+            />
+            <MetricCard
+              icon={
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#2C4A31" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M9 3v5M15 3v5M7 8h10v3a5 5 0 0 1-10 0V8Z" />
+                  <path d="M12 16v5" />
+                </svg>
+              }
+              label="Enchufes"
+              valor={etiquetaNivel(promEnchufes, "enchufes")}
+            />
+            <MetricCard
+              icon={
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#2C4A31" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 9v6h4l5 4V5L9 9H5Z" />
+                  <path d="M17 9a4 4 0 0 1 0 6" />
+                </svg>
+              }
+              label="Silencio"
+              valor={etiquetaNivel(promRuido, "ruido")}
+            />
+          </div>
+
+          <h2 className="mt-7 mb-3 text-[15px] font-bold text-ink">Reseñas</h2>
+          <div className="flex flex-col gap-3">
+            {resenas.map((r, i) => (
+              <div
+                key={r.id}
+                style={{ animationDelay: `${i * 60}ms` }}
+                className="animate-fade-in-up bg-white border border-neutral-200 rounded-2xl p-3.5"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="text-[13px] font-semibold text-ink">Estudiante</div>
+                  <Stars rating={(r.rating_wifi + r.rating_enchufes + r.rating_ruido) / 3} />
+                </div>
+                {r.comentario && (
+                  <div className="text-[13px] text-neutral-600 mt-1.5 leading-relaxed">{r.comentario}</div>
+                )}
               </div>
-              {r.comentario && (
-                <div className="text-[13px] text-neutral-600 mt-1.5 leading-relaxed">{r.comentario}</div>
-              )}
-            </div>
-          ))}
-          {resenas.length === 0 && (
-            <p className="text-sm text-muted">Sé el primero en dejar una reseña de este lugar.</p>
-          )}
+            ))}
+            {resenas.length === 0 && (
+              <p className="text-sm text-muted">Sé el primero en dejar una reseña de este lugar.</p>
+            )}
+          </div>
         </div>
       </div>
 
@@ -206,7 +262,7 @@ export default function Detalle() {
         <div className="max-w-md mx-auto">
           <Link
             to={`/lugar/${id}/resena`}
-            className="block text-center bg-accent text-paper rounded-2xl py-3.5 font-semibold text-[15px]"
+            className="block text-center bg-accent text-paper rounded-2xl py-3.5 font-semibold text-[15px] transition-transform active:scale-[0.98]"
           >
             Dejar reseña
           </Link>
