@@ -1,0 +1,98 @@
+.spot-shell {
+  min-height: 100vh;
+  background: #edf1f2;
+  color: #173038;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  padding: clamp(12px, 3vw, 40px);
+}
+.spot-header, .spot-main {
+  width: min(100%, 1440px);
+  margin-inline: auto;
+  background: #fff;
+}
+.spot-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 24px;
+  border-radius: 22px 22px 0 0;
+  border-bottom: 1px solid #e7edef;
+}
+.spot-brand { display: inline-flex; align-items: center; gap: 10px; font-size: 1.24rem; font-weight: 750; text-decoration: none; }
+.spot-brand > span { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 10px; background: #d9efeb; }
+.spot-categories { display: flex; flex-wrap: wrap; gap: 3px; padding: 4px; background: #f1f6f6; border-radius: 12px; }
+.spot-categories button, .spot-toolbar button, .spot-login, .spot-title select, .spot-detail button {
+  background: #f4f7f7;
+  border: 1px solid #e3eaeb;
+  border-radius: 9px;
+  padding: 8px 12px;
+  font-size: .84rem;
+  font-weight: 600;
+  color: #173038;
+}
+.spot-categories button { border-color: transparent; }
+.spot-categories [aria-pressed='true'], .spot-toolbar [aria-pressed='true'] { background: #1d6668; color: #fff; }
+.spot-demo { font-size: .78rem; color: #476269; white-space: nowrap; }
+.spot-main { padding: clamp(16px, 2.7vw, 36px); border-radius: 0 0 22px 22px; min-height: 78vh; }
+.spot-toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.spot-toolbar input {
+  flex: 1 1 240px;
+  min-width: 0;
+  border: 1px solid #dde7e8;
+  border-radius: 10px;
+  padding: 10px 14px;
+  background: #f3f7f7;
+  color: #173038;
+}
+.spot-map-toggle { margin-left: auto; }
+.spot-title { display: flex; align-items: end; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin: 28px 0 17px; }
+.spot-title h1 { font-size: clamp(1.7rem, 3vw, 2.6rem); font-weight: 750; line-height: 1.12; letter-spacing: -.04em; }
+.spot-title p { margin-top: 6px; color: #536c72; }
+.spot-title label { color: #536c72; font-size: .84rem; }
+.spot-results { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(250px, 1fr); gap: 16px; align-items: start; }
+.spot-results--wide { grid-template-columns: minmax(0, 1fr); }
+.spot-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.spot-card { position: relative; min-width: 0; overflow: hidden; border-radius: 14px; background: #fff; border: 1px solid #e0e9e9; box-shadow: 0 2px 7px #233e4110; }
+.spot-card[data-selected='true'] { outline: 2px solid #217f79; outline-offset: 2px; }
+.spot-photo { position: relative; aspect-ratio: 1.32; display: grid; place-items: center; background: #cfe5df; }
+.spot-photo--cafe { background: #f5e2d4; }
+.spot-photo--sala { background: #d8e9ef; }
+.spot-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.spot-photo img[hidden] { display: none; }
+.spot-photo-label { position: absolute; top: 8px; left: 8px; padding: 4px 7px; border-radius: 6px; background: #fff; color: #344c53; font-size: .65rem; }
+.spot-card-body { position: relative; padding: 10px 12px 9px; }
+.spot-kind { font-size: .72rem; font-weight: 650; color: #216760; }
+.spot-card h2 { overflow-wrap: anywhere; margin: 3px 0; line-height: 1.25; font-size: .98rem; font-weight: 740; }
+.spot-card p, .spot-card-meta { font-size: .79rem; color: #486167; }
+.spot-card-meta { display: flex; justify-content: space-between; align-items: center; gap: 6px; margin-top: 6px; }
+.spot-card-meta :is(button,a) { display: grid; place-items: center; min-width: 31px; min-height: 31px; border-radius: 50%; background: #e2f2ef; color: #155b55; font-weight: 750; }
+.spot-map {
+  position: relative;
+  min-height: clamp(390px, 43vw, 670px);
+  overflow: hidden;
+  border: 1px solid #dbe4df;
+  border-radius: 15px;
+  background-color: #dce8df;
+  background-image: linear-gradient(139deg, transparent 42%, #79aaa8 43% 49%, transparent 50%), repeating-linear-gradient(38deg, transparent 0 34px, #f8fbf6 35px 40px, transparent 41px 68px), repeating-linear-gradient(125deg, #dae5df 0 30px, #f7faf6 31px 37px, #c5d9d0 38px 44px);
+}
+.spot-map-heading { position: absolute; z-index: 1; bottom: 12px; left: 12px; padding: 7px 11px; border-radius: 9px; background: #fff; box-shadow: 0 3px 12px #17303820; }
+.spot-map-heading p { color: #526969; font-size: .75rem; }
+.spot-pin { position: absolute; transform: translate(-50%, -50%); padding: 6px 9px; min-height: 34px; border: 1px solid #d6e6e0; border-radius: 20px; background: #fff; color: #1e4a4b; box-shadow: 0 3px 10px #183b3d33; font-size: .78rem; font-weight: 700; white-space: nowrap; }
+.spot-pin[aria-pressed='true'] { background: #1d6668; color: #fff; }
+.spot-empty { grid-column: 1 / -1; color: #536c72; padding-block: 14px; }
+.spot-detail { position: fixed; z-index: 8; bottom: 12px; left: 50%; transform: translateX(-50%); width: min(680px, calc(100% - 24px)); padding: 14px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; border: 1px solid #a7c9c4; border-radius: 12px; background: #eef8f5; box-shadow: 0 5px 22px #17303824; }
+.spot-detail h2 { font-weight: 750; }
+.spot-shell :is(a, button, input, select, article):focus-visible { outline: 3px solid #27877e; outline-offset: 3px; }
+@media (max-width: 1080px) {
+  .spot-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 740px) {
+  .spot-header { flex-wrap: wrap; padding: 12px 14px; }
+  .spot-categories { order: 3; width: 100%; }
+  .spot-results { grid-template-columns: minmax(0, 1fr); }
+  .spot-map { min-height: 320px; }
+}
+@media (max-width: 370px) {
+  .spot-grid { grid-template-columns: minmax(0, 1fr); }
+}

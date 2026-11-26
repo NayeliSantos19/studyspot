@@ -6,6 +6,14 @@ Encuentra el mejor lugar para estudiar en tu universidad: wifi, enchufes y silen
 
 Proyecto de portafolio — ver `StudySpot-PRD.docx` (planeación) y `StudySpot-Caso-de-Estudio.docx` (retrospectiva) para el contexto completo del proceso.
 
+## Explorador de espacios
+
+La portada presenta una cuadrícula de espacios con fotos, búsqueda por nombre o ubicación, filtros de servicios y un plano interactivo. Sus posiciones son ilustrativas y las fotos de ejemplo no corresponden a lugares del campus.
+
+Sin configuración de Supabase, o si el catálogo no responde, StudySpot muestra una demo de solo lectura con datos de ejemplo. El inicio de sesión y las reseñas de la aplicación completa requieren Supabase.
+
+Fotos ilustrativas de [Joey Zhou](https://unsplash.com/photos/y3eod0qQ8po), [Nikita Pishchugin](https://unsplash.com/photos/B5giYHNQPvA) y [Clay Banks](https://unsplash.com/photos/Mb-lGau6K5U).
+
 ## Cómo correrlo localmente
 
 1. Instala las dependencias:
@@ -52,4 +60,4 @@ src/
 - [x] Cargar lugares reales de la universidad
 - [ ] Conseguir las primeras reseñas de usuarios reales
 - [ ] Agregar más categorías de lugares (áreas verdes, comedores) con íconos propios
-- [ ] Explorar un mapa interactivo en una v2
+- [x] Agregar un plano interactivo de ubicaciones ilustrativas
