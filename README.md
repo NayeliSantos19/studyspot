@@ -2,7 +2,7 @@
 
 Encuentra el mejor lugar para estudiar en tu universidad: wifi, enchufes y silencio, calificados por otros estudiantes.
 
-🔗 **Demo en vivo:** https://studyspot-eta.vercel.app
+**[Demo pública del explorador](https://nayelisantos19.github.io/studyspot-demo/)** · [Aplicación con Supabase](https://studyspot-eta.vercel.app)
 
 Proyecto de portafolio — ver `StudySpot-PRD.docx` (planeación) y `StudySpot-Caso-de-Estudio.docx` (retrospectiva) para el contexto completo del proceso.
 
